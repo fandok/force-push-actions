@@ -1,0 +1,31 @@
+
+name: Force Push Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'your full name'
+        default: ''
+        required: true
+      email:
+        description: 'your work email'
+        default: ''
+        required: true
+      branch:
+        description: 'your branch that you want to force push'
+        default: ''
+        required: true
+
+jobs:
+  default_action:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Git push
+      run: |
+          git config --global user.name '${{ github.event.inputs.name }}'
+          git config --global user.email '${{ github.event.inputs.email }}'
+          git branch -D ${{ github.event.inputs.branch }}
+          git checkout -b ${{ github.event.inputs.branch }}
+          git push --set-upstream origin ${{ github.event.inputs.branch }} --force
