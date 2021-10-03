@@ -26,6 +26,8 @@ jobs:
       run: |
           git config --global user.name '${{ github.event.inputs.name }}'
           git config --global user.email '${{ github.event.inputs.email }}'
-          git branch -D ${{ github.event.inputs.branch }}
+          if git show-ref --quiet ${{ github.event.inputs.branch }}; then
+            git branch -D ${{ github.event.inputs.branch }}
+          fi
           git checkout -b ${{ github.event.inputs.branch }}
           git push --set-upstream origin ${{ github.event.inputs.branch }} --force
